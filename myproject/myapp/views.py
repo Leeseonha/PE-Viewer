@@ -34,6 +34,7 @@ import pefile
 import struct
 import datetime
 from django.views.decorators.csrf import csrf_exempt
+from myapp import IMAGE_DOS_HEADER 
 
 
 
@@ -50,6 +51,17 @@ def result(request):
     
     pFile_start = pe.DOS_HEADER.e_lfanew
     pFile = format(pFile_start, '#010x') #pFile 출력형식지정
+
+    image_dos_header_list =  IMAGE_DOS_HEADER.image_dos_header_list
+
+    f = open(path, 'rb')
+    t = 0x0
+    data = f.read()
+    DosHeaderInfo = IMAGE_DOS_HEADER.DosHeader(t)
+    DosHeaderInfo.print()
+    NTHeaderAddressSt = struct.unpack('<HH', DosHeaderInfo.e_lfanew) #e_lfanew에 NTHeaderAddress의 주소가 있다
+    NTHeaderAddress = IMAGE_DOS_HEADER.intTupletoInt(NTHeaderAddressSt) 
+    DosStubInfo = IMAGE_DOS_HEADER.DosStub(DosHeaderInfo.getT(), NTHeaderAddress)
 
     signature_header_list = []
     file_header_list = []
@@ -119,6 +131,4 @@ def result(request):
     print(a)       
     print("-" * 30,"\n") 
     
-    return render(request,'result.html',{'path' : path , 'lists' : a , 'inform' : inform, 'signature_header_list' : signature_header_list, 'file_header_list': file_header_list, 'optional_header_list' : optional_header_list})
-
-
+    return render(request,'result.html',{'path' : path , 'lists' : a , 'inform' : inform,'image_dos_header_list':image_dos_header_list, 'signature_header_list' : signature_header_list, 'file_header_list': file_header_list, 'optional_header_list' : optional_header_list})
