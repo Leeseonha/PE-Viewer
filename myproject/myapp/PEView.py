@@ -91,9 +91,11 @@ class DosHeader:
     def getE_lfanew(self):
         return self.e_lfanew
          
+DosStub_list = []
 class DosStub:
-    def __init__(self, t, d):      
+    def __init__(self, t, d):  
         self.info = data[t:d]
+        DosStub_list.append(["RawData",self.info])   
 
     def print(self):
         print("########Dos Stub########")
@@ -331,6 +333,7 @@ NTHeaderAddress = byteToInt(DosHeaderInfo.getE_lfanew()) #e_lfanew에 NTHeaderAd
 
 DosStubInfo = DosStub(DosHeaderInfo.getT(), NTHeaderAddress)
 DosStubInfo.print()
+print(DosStub_list)
 
 NTHeaderInfo = NTHeader(NTHeaderAddress)
 NTHeaderInfo.print()
@@ -347,10 +350,10 @@ for i in headerRva:
 if relocSecNumber != -1:
     SectionInfo[relocSecNumber] = relocSection(rvaToOffset(dirRva[5], headerRva[relocSecNumber], headerPToRawData[relocSecNumber]), dirSize[5]) 
 
-SectionInfo[relocSecNumber].print() # 나중에는 각각의 섹션을 index0부터 반복문으로 출력하게 구현
-CertiOffset = byteToInt(NTHeaderInfo.getDir()[4][1])
-CertiSize = byteToInt(NTHeaderInfo.getDir()[4][2])
-CertificateInfo = CertificateTable(CertiOffset, CertiSize)
-CertificateInfo.print()
+# SectionInfo[relocSecNumber].print() # 나중에는 각각의 섹션을 index0부터 반복문으로 출력하게 구현
+# CertiOffset = byteToInt(NTHeaderInfo.getDir()[4][1])
+# CertiSize = byteToInt(NTHeaderInfo.getDir()[4][2])
+# CertificateInfo = CertificateTable(CertiOffset, CertiSize)
+# CertificateInfo.print()
     
 f.close()

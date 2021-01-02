@@ -35,7 +35,7 @@ import struct
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 from myapp import IMAGE_DOS_HEADER 
-
+from myapp import PEView
 
 
 def home(request):
@@ -62,6 +62,10 @@ def result(request):
     NTHeaderAddressSt = struct.unpack('<HH', DosHeaderInfo.e_lfanew) #e_lfanew에 NTHeaderAddress의 주소가 있다
     NTHeaderAddress = IMAGE_DOS_HEADER.intTupletoInt(NTHeaderAddressSt) 
     DosStubInfo = IMAGE_DOS_HEADER.DosStub(DosHeaderInfo.getT(), NTHeaderAddress)
+    
+    DosStub_list = PEView.DosStub_list
+    DosStubInfo.print()
+
 
     signature_header_list = []
     file_header_list = []
@@ -131,4 +135,4 @@ def result(request):
     print(a)       
     print("-" * 30,"\n") 
     
-    return render(request,'result.html',{'path' : path , 'lists' : a , 'inform' : inform,'image_dos_header_list':image_dos_header_list, 'signature_header_list' : signature_header_list, 'file_header_list': file_header_list, 'optional_header_list' : optional_header_list})
+    return render(request,'result.html',{'path' : path , 'lists' : a , 'inform' : inform,'image_dos_header_list':image_dos_header_list,'DosStub_list':DosStub_list, 'signature_header_list' : signature_header_list, 'file_header_list': file_header_list, 'optional_header_list' : optional_header_list})
