@@ -1,6 +1,15 @@
 # PE-Viewer
-리버싱
+
 #### PE뷰어가 제공하는 기능을 직접 구현
+
+<hr>
+
+IMAGE_DOS_HEADER.py , IMAGE_NT_HEADERS.py 
+
+파일 완성도 ------>(높음)
+
+pvproject.py , PEView.py , PEView_final.py , sec.py , pv.py
+
 
 경로 : C:/reversing/notepad.exe
 
